@@ -5,11 +5,13 @@ import com.nsunf.newsvoca.constant.Role;
 import com.nsunf.newsvoca.entity.Member;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 public class CustomUserDetails implements UserDetails {
@@ -32,6 +34,10 @@ public class CustomUserDetails implements UserDetails {
         this.password = member.getPassword();
         this.role = member.getRole();
         this.status = member.getStatus();
+    }
+
+    public List<String> getRoles() {
+        return this.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
     }
 
     @Override

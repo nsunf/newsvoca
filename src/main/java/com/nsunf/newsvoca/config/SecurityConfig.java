@@ -1,6 +1,5 @@
 package com.nsunf.newsvoca.config;
 
-import com.nsunf.newsvoca.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,9 +16,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final JwtTokenProvider jwtTokenProvider;
+    private final TokenProvider jwtTokenProvider;
 
-//    private final MemberService memberService;
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
@@ -34,17 +37,15 @@ public class SecurityConfig {
                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                .and()
                .authorizeRequests()
-               .antMatchers("/articles/**", "/user/login", "/user/signup", "/translator/**").permitAll()
+               .antMatchers("/api/user", "/api/scrap-book", "/api/voca").authenticated()
+//               .antMatchers("/articles/**", "/user/login", "/user/signup", "/translator/**").permitAll()
+               .anyRequest().permitAll()
                .and()
-//               .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
+               .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
                ;
 
        return http.build();
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-    }
 
 }

@@ -2,14 +2,13 @@ package com.nsunf.newsvoca.entity;
 
 import com.nsunf.newsvoca.constant.MemberStatus;
 import com.nsunf.newsvoca.constant.Role;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
+@EqualsAndHashCode(callSuper = true)
+@Data
 @Entity
-@Getter
-@Setter
 public class Member extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
