@@ -26,6 +26,9 @@ dependencies {
 //	implementation 'com.oracle.database.jdbc:ojdbc8:21.9.0.0'
 	implementation 'com.h2database:h2:2.1.214'
 	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+	implementation 'org.seleniumhq.selenium.fluent:fluent-selenium:1.23'
+	implementation 'com.github.slugify:slugify:3.0.2'
+	implementation 'org.modelmapper:modelmapper:3.1.1'
 
 	compileOnly 'org.projectlombok:lombok'
 

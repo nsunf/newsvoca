@@ -1,12 +1,12 @@
 package com.nsunf.newsvoca.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Getter
 @Setter
+@Builder
 @Entity
 public class CategoryMajor extends BaseEntity {
     @Id
