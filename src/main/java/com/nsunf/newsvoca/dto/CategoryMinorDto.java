@@ -10,4 +10,5 @@ public class CategoryMinorDto {
     private String name;
     private String pathname;
     private CategoryMajorDto categoryMajor;
+    private int catOrder;
 }

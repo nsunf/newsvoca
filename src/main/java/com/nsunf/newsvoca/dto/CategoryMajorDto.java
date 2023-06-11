@@ -9,4 +9,6 @@ public class CategoryMajorDto {
     private Long id;
     private String name;
     private String pathname;
+    private int catOrder;
+    private char repYN;
 }

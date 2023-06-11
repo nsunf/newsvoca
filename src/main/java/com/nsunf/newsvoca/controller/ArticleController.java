@@ -1,5 +1,6 @@
 package com.nsunf.newsvoca.controller;
 
+import com.nsunf.newsvoca.service.ArticleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,13 +17,15 @@ import java.util.Map;
 @RequestMapping("/api/articles")
 public class ArticleController {
 
+    private final ArticleService articleService;
+
     @GetMapping({ "", "/" })
     public ResponseEntity<?> getArticles(
             @RequestParam(name = "major-cat", required = false) String majorCat,
             @RequestParam(name = "minor-cat", required = false) String minorCat)
     {
-        System.out.println(majorCat);
-        System.out.println(minorCat);
+        articleService.getArticles(majorCat, minorCat);
+
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
 }

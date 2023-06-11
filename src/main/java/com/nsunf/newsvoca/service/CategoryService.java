@@ -29,19 +29,19 @@ public class CategoryService {
         if (categoryMajorRepository.findAll().size() != 0 || categoryMinorRepository.findAll().size() != 0) return;
 
         List<CategoryMajor> catMajList = new ArrayList<>();
-        CategoryMajor worldCat = CategoryMajor.builder().name("World").pathname("world").build();
+        CategoryMajor worldCat = CategoryMajor.builder().name("World").pathname("world").catOrder(1).repYN('Y').build();
         catMajList.add(worldCat);
 
         List<CategoryMinor> catMinList = new ArrayList<>();
-        catMinList.add(CategoryMinor.builder().categoryMajor(worldCat).name("Africa").pathname("africa").build());
-        catMinList.add(CategoryMinor.builder().categoryMajor(worldCat).name("Americas").pathname("americas").build());
-        catMinList.add(CategoryMinor.builder().categoryMajor(worldCat).name("Asia").pathname("asia").build());
-        catMinList.add(CategoryMinor.builder().categoryMajor(worldCat).name("Australia").pathname("australia").build());
-        catMinList.add(CategoryMinor.builder().categoryMajor(worldCat).name("China").pathname("china").build());
-        catMinList.add(CategoryMinor.builder().categoryMajor(worldCat).name("Europe").pathname("europe").build());
-        catMinList.add(CategoryMinor.builder().categoryMajor(worldCat).name("India").pathname("india").build());
-        catMinList.add(CategoryMinor.builder().categoryMajor(worldCat).name("Middle East").pathname("middleeast").build());
-        catMinList.add(CategoryMinor.builder().categoryMajor(worldCat).name("United Kingdom").pathname("uk").build());
+        catMinList.add(CategoryMinor.builder().categoryMajor(worldCat).name("Africa").pathname("africa").catOrder(1).build());
+        catMinList.add(CategoryMinor.builder().categoryMajor(worldCat).name("Americas").pathname("americas").catOrder(2).build());
+        catMinList.add(CategoryMinor.builder().categoryMajor(worldCat).name("Asia").pathname("asia").catOrder(3).build());
+        catMinList.add(CategoryMinor.builder().categoryMajor(worldCat).name("Australia").pathname("australia").catOrder(4).build());
+        catMinList.add(CategoryMinor.builder().categoryMajor(worldCat).name("China").pathname("china").catOrder(5).build());
+        catMinList.add(CategoryMinor.builder().categoryMajor(worldCat).name("Europe").pathname("europe").catOrder(6).build());
+        catMinList.add(CategoryMinor.builder().categoryMajor(worldCat).name("India").pathname("india").catOrder(7).build());
+        catMinList.add(CategoryMinor.builder().categoryMajor(worldCat).name("Middle East").pathname("middleeast").catOrder(8).build());
+        catMinList.add(CategoryMinor.builder().categoryMajor(worldCat).name("United Kingdom").pathname("uk").catOrder(9).build());
 
         catMajList.forEach(categoryMajorRepository::save);
         catMinList.forEach(categoryMinorRepository::save);
@@ -61,5 +61,21 @@ public class CategoryService {
                 .stream()
                 .map(cat -> modelMapper.map(cat, CategoryMinorDto.class))
                 .collect(Collectors.toList());
+    }
+
+    public CategoryMajor getCategoryMajorByName(String name) {
+        return categoryMajorRepository.findByNameIgnoreCase(name.replaceAll("-", " "));
+    }
+
+    public CategoryMinor getCategoryMinorByName(String name) {
+        return categoryMinorRepository.findByNameIgnoreCase(name.replaceAll("-", " "));
+    }
+
+    public CategoryMajor getCategoryMajorByPathname(String pathname) {
+        return categoryMajorRepository.findByPathname(pathname);
+    }
+
+    public CategoryMinor getCategoryMinorByPathame(String pathname) {
+        return categoryMinorRepository.findByPathname(pathname);
     }
 }

@@ -8,6 +8,8 @@ import javax.persistence.*;
 @Setter
 @Builder
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 public class CategoryMajor extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -16,4 +18,8 @@ public class CategoryMajor extends BaseEntity {
     private String name;
     @Column(nullable = false, unique = true)
     private String pathname;
+    @Column(nullable = false)
+    private int catOrder;
+    @Column(nullable = false)
+    private char repYN;
 }

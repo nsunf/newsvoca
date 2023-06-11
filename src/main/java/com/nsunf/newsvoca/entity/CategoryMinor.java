@@ -1,8 +1,6 @@
 package com.nsunf.newsvoca.entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -10,6 +8,8 @@ import javax.persistence.*;
 @Setter
 @Builder
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 public class CategoryMinor extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,4 +21,6 @@ public class CategoryMinor extends BaseEntity {
     private String name;
     @Column(nullable = false, unique = true)
     private String pathname;
+    @Column(nullable = false)
+    private int catOrder;
 }
