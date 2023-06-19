@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -25,7 +27,7 @@ public class ArticleCrawler extends Crawler {
         List<String> result = new ArrayList<>();
 
         WebDriver driver = startDriver();
-        loadPage(url);
+        loadPage(driver, url);
 
         List<WebElement> cardList = driver.findElement(By.className("zone")).findElements(By.className("card"));
 
@@ -36,14 +38,16 @@ public class ArticleCrawler extends Crawler {
             result.add(anchor.getAttribute("href"));
         }
 
-        quitDriver();
+        driver.quit();
 
         return result;
     }
 
-    public Article getArticle(String url) {
+    public Article getArticle(String url, long nextId) {
         WebDriver driver = startDriver();
-        loadPage(url);
+        driver.get(url);
+
+
         // 기사 제목 추출
         String headline = driver.findElement(By.className("headline__text")).getText();
         // 기자 추출
@@ -53,16 +57,9 @@ public class ArticleCrawler extends Crawler {
                 .orElseGet(() -> "");
         // 발행일 추출
         String timeStamp = driver.findElement(By.className("timestamp")).getText();
-        String[] splittedTimeStamp = timeStamp.split(" ");
-        String editedTimeStamp = String.join(" ", Arrays.copyOfRange(splittedTimeStamp, 1, splittedTimeStamp.length));
-        Date pubDate = null;
-
-        try {
-            SimpleDateFormat formatter = new SimpleDateFormat("h:mm a z, EEE MMM d, yyyy", Locale.US);
-            pubDate = formatter.parse(editedTimeStamp);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        String editedTimeStamp = timeStamp.substring(timeStamp.indexOf(" ") + 1);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h:mm a z, EEE MMMM d, yyyy", Locale.US);
+        LocalDateTime pubDate = LocalDateTime.parse(editedTimeStamp, formatter);
 
         String[] splittedUrl = url.split("/");
         String cat = splittedUrl[splittedUrl.length - 3];
@@ -70,7 +67,6 @@ public class ArticleCrawler extends Crawler {
         Slugify slg = Slugify.builder().build();
         String slugStr = slg.slugify(headline);
 
-//        String articleUrl = String.join("/", "/article", String.valueOf());
 
         CategoryMajor majorCat = categoryService.getCategoryMajorByPathname(cat);
         CategoryMinor minorCat = null;
@@ -80,18 +76,26 @@ public class ArticleCrawler extends Crawler {
             majorCat = minorCat.getCategoryMajor();
         }
 
+        String pathname = String.join("/",
+                "/article",
+                String.valueOf(nextId),
+                minorCat == null ? majorCat.getName() : minorCat.getName(),
+                slugStr
+        );
+
+        driver.quit();
+
         return Article.builder()
+                .id(nextId)
                 .categoryMajor(majorCat)
                 .categoryMinor(minorCat)
                 .oriUrl(url)
-                .url("")
+                .pathname(pathname)
                 .title(headline)
                 .slug(slugStr)
-//                .publishTime(pubDate)
+                .publishTime(pubDate)
                 .author(authors)
                 .view(0)
                 .build();
     }
-    // url생성에 generate된 id가 필요
-    // Date와 LocalDateTime 타입 불일치
 }

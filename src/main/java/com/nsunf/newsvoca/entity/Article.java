@@ -8,13 +8,13 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@ToString
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 public class Article extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @ManyToOne
     @JoinColumn(name = "category_major_id", nullable = false)
@@ -25,7 +25,7 @@ public class Article extends BaseEntity {
     @Column(nullable = false)
     private String oriUrl;
     @Column(nullable = false)
-    private String url;
+    private String pathname;
     @Column(nullable = false)
     private String title;
     @Column(nullable = false)

@@ -1,35 +1,42 @@
 package com.nsunf.newsvoca.crawler;
 
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.PageLoadStrategy;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 
-public class Crawler {
-    private static WebDriver driver;
+import java.util.concurrent.TimeUnit;
 
-    static {
-        System.setProperty("webdriver.gecko.driver", "src/main/resources/geckodriver");
+public class Crawler {
+    public Crawler() {
+        System.setProperty("webdriver.chrome.driver", "src/main/resources/chromedriver");
+//        System.setProperty("webdriver.gecko.driver", "src/main/resources/geckodriver");
+        System.setProperty("MOZ_REMOTE_SETTINGS_DEVTOOLS", "1");
     }
 
     public WebDriver startDriver() {
 
-        if (driver != null) quitDriver();
+//        FirefoxOptions options = new FirefoxOptions();
+//        options.setHeadless(true);
+//
+//        driver = new FirefoxDriver(options);
 
-        FirefoxOptions options = new FirefoxOptions();
-        options.setHeadless(true);
+        ChromeOptions options = new ChromeOptions();
+        options.setPageLoadStrategy(PageLoadStrategy.EAGER);
+        options.addArguments("headless");
+        options.addArguments("--disable-gpu");
+        options.addArguments("--disable-popup-blocking");
+        options.addArguments("--disable-notifications");
+        options.addArguments("--blink-settings=imagesEnabled=false");
+        options.addArguments("--remote-allow-origins=*");
 
-        driver = new FirefoxDriver(options);
-
-        return driver;
+        return new ChromeDriver(options);
     }
 
-    public void quitDriver() {
-        driver.quit();
-        driver = null;
-    }
-
-    public void loadPage(String url) {
+    public void loadPage(WebDriver driver, String url) {
         System.out.println("-- Crawler --------------------");
         System.out.println(url + " 접속중");
         long beforeTime = System.currentTimeMillis();
@@ -51,7 +58,7 @@ public class Crawler {
             }
 
             try {
-                Thread.sleep(500);
+                Thread.sleep(200);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
