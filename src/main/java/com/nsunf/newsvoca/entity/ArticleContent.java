@@ -1,19 +1,26 @@
 package com.nsunf.newsvoca.entity;
 
 import com.nsunf.newsvoca.entity.composite_key.ArticleContentId;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
-@Getter
-@Setter
-@MappedSuperclass
-public class ArticleContent extends BaseEntity{
-    @EmbeddedId ArticleContentId id;
+@Data
+//@EqualsAndHashCode(callSuper = true)
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+public class ArticleContent {
+    @Id
+//    @GeneratedValue(strategy = GenerationType.AUTO)
+//    @Column(name = "content_id")
+    private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("articleId")
-    @JoinColumn(name = "article_id", nullable = false, referencedColumnName = "id")
-    protected Article article;
+//    @Column(name = "content_order", nullable = false)
+//    private Long contentOrder;
+//
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "article_id", nullable = false)
+//    protected Article article;
 }

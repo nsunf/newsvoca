@@ -2,9 +2,7 @@ package com.nsunf.newsvoca.service;
 
 import com.nsunf.newsvoca.crawler.ArticleCrawler;
 import com.nsunf.newsvoca.dto.ArticleDto;
-import com.nsunf.newsvoca.entity.Article;
-import com.nsunf.newsvoca.entity.CategoryMajor;
-import com.nsunf.newsvoca.entity.CategoryMinor;
+import com.nsunf.newsvoca.entity.*;
 import com.nsunf.newsvoca.repository.ArticleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -30,37 +28,38 @@ public class ArticleService {
         return articleRepository.findNextId().orElse(0L) + 1L;
     }
 
+
     public List<ArticleDto> getArticles(String majorCatName, String minorCatName) {
-        // CNN URL 찾기
-        String cnnUrl = "https://edition.cnn.com";
-        if (majorCatName != null) {
-            CategoryMajor catMaj = categoryService.getCategoryMajorByName(majorCatName);
-            if (catMaj != null)
-                cnnUrl += "/" + catMaj.getName().replaceAll(" ", "-").toLowerCase();
+        // crawler를 이용한 데이터 갱신
+        List<String> articleUrlList = articleCrawler.getArticleUrls(majorCatName, minorCatName);
+        saveArticles(articleUrlList);
+        // db에서 데이터 조회 후 dto 반환
 
-            if (minorCatName != null) {
-                CategoryMinor catMin = categoryService.getCategoryMinorByName(minorCatName);
-                if (catMin != null)
-                    cnnUrl += "/" + catMin.getName().replaceAll(" ", "-").toLowerCase();
-            }
-        }
+        return null;
+    }
 
-
-        List<String> newArticleUrls = articleCrawler.getArticleUrls(cnnUrl);
-        System.out.println("---> article 개수 " + newArticleUrls.size());
+    public void saveArticles(List<String> urlList) {
+        List<String> newArticleUrls = urlList.stream().filter(url -> !articleRepository.existsByOriUrl(url)).collect(Collectors.toList());
+        System.out.println("탐색된 url : " + urlList.size() + ", 저장할 url : " + newArticleUrls.size());
         long nextId = getNextId();
 
         ExecutorService executors = Executors.newCachedThreadPool();
 
         Vector<Article> articleList = new Vector<>();
+        Vector<Paragraph> paragraphList = new Vector<>();
+        Vector<ArticleImg> articleImgList = new Vector<>();
 
         for (int i = 0; i < newArticleUrls.size(); i++) {
             final int index = i;
             final String url = newArticleUrls.get(index);
             executors.submit(() -> {
                 try {
-                    Article article = articleCrawler.getArticle(url, nextId + index);
-                    articleList.add(article);
+                    articleCrawler.getArticle(
+                            url,
+                            nextId + index,
+                            articleList::add,
+                            paragraphList::addAll,
+                            articleImgList::addAll);
                 } catch (Exception e) {
                     System.err.println("url ---> " + url);
                     e.printStackTrace();
@@ -77,17 +76,10 @@ public class ArticleService {
         }
 
         articleList.forEach(System.out::println);
+        paragraphList.forEach(System.out::println);
+        articleImgList.forEach(System.out::println);
+
         System.out.println("--end--");
-
-        // 멀티 스레드를 이용하여 구현
-        // 성능차 고려
-
-        return null;
-    }
-
-    public void saveArticles(List<String> urlList) {
-        List<String> newArticleUrls = urlList.stream().filter(articleRepository::existsByOriUrl).collect(Collectors.toList());
-
 
 
     }

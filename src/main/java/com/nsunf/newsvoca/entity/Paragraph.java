@@ -1,16 +1,25 @@
 package com.nsunf.newsvoca.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
+import javax.persistence.*;
 
-@Getter
-@Setter
+@Data
 @Entity
-public class Paragraph extends ArticleContent {
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class Paragraph {
+    @Id
+    @Column(name = "paragraph_id")
+    private long id;
+
+    @MapsId
+    @OneToOne
+    @JoinColumn(name = "paragraph_id")
+    private ArticleContent articleContent;
+
     @Column(nullable = false)
     private String content;
 

@@ -1,16 +1,24 @@
 package com.nsunf.newsvoca.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import com.nsunf.newsvoca.entity.composite_key.ArticleContentId;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
+import javax.persistence.*;
 
-@Getter
-@Setter
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
-public class ArticleImg extends ArticleContent {
+public class ArticleImg {
+    @Id
+    @Column(name = "article_img_id")
+    private long id;
+    @MapsId
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "article_img_id")
+    private ArticleContent articleContent;
     @Column
     private String caption;
     @Column(nullable = false)
