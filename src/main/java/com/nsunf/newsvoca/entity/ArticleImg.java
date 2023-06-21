@@ -1,6 +1,5 @@
 package com.nsunf.newsvoca.entity;
 
-import com.nsunf.newsvoca.entity.composite_key.ArticleContentId;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -13,18 +12,23 @@ import javax.persistence.*;
 @Entity
 public class ArticleImg {
     @Id
-    @Column(name = "article_img_id")
-    private long id;
+    @Column(name = "article_content_id")
+    private Long id;
+
+    @OneToOne
+    @JoinColumn(name = "article_content_id", nullable = false)
     @MapsId
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "article_img_id")
     private ArticleContent articleContent;
-    @Column
+
+    @Column(columnDefinition = "VARCHAR2(1024)")
     private String caption;
+
     @Column(nullable = false)
     private String url;
-    @Column(nullable = false)
-    private String filename;
+
+//    @Column(nullable = false)
+//    private String filename;
+
     @Column(nullable = false)
     @ColumnDefault("'N'")
     private String repYN;

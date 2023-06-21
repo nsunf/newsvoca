@@ -22,7 +22,7 @@ public class ArticleController {
             @RequestParam(name = "minor-cat", required = false) String minorCat)
     {
         long tmpTime = System.currentTimeMillis();
-        articleService.getArticles(majorCat, minorCat);
+        articleService.getArticles(majorCat, minorCat).forEach(System.out::println);
         System.out.println("@@@ " + (System.currentTimeMillis() - tmpTime) * 0.001);
 
         return new ResponseEntity<>(null, HttpStatus.OK);

@@ -13,6 +13,7 @@ import javax.persistence.*;
 public class CategoryMinor extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "category_minor_id")
     private Long id;
     @ManyToOne
     @JoinColumn(name="category_major_id", nullable = false)

@@ -12,6 +12,8 @@ import javax.persistence.*;
 public class Member extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "member_id")
+
     private Long id;
 
     @Column(nullable = false)

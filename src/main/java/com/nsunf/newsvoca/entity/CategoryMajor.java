@@ -13,6 +13,7 @@ import javax.persistence.*;
 public class CategoryMajor extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "category_major_id")
     private Long id;
     @Column(nullable = false, unique = true)
     private String name;

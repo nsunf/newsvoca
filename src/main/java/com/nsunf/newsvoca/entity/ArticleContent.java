@@ -6,21 +6,21 @@ import lombok.*;
 import javax.persistence.*;
 
 @Data
-//@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class ArticleContent {
+public class ArticleContent extends BaseEntity {
     @Id
-//    @GeneratedValue(strategy = GenerationType.AUTO)
-//    @Column(name = "content_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "content_id")
     private Long id;
 
-//    @Column(name = "content_order", nullable = false)
-//    private Long contentOrder;
-//
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "article_id", nullable = false)
-//    protected Article article;
+    @Column(name = "content_order", nullable = false)
+    private Long contentOrder;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "article_id", nullable = false)
+    protected Article article;
 }

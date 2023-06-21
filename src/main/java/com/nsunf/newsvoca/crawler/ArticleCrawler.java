@@ -11,8 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -24,28 +22,7 @@ public class ArticleCrawler extends Crawler {
 
     private final CategoryService categoryService;
 
-    public String getUrl(String majorCatName, String minorCatName) {
-        String cnnUrl = "https://edition.cnn.com";
-        if (majorCatName != null) {
-            CategoryMajor catMaj = categoryService.getCategoryMajorByName(majorCatName);
-            if (catMaj != null)
-                cnnUrl += "/" + catMaj.getName().replaceAll(" ", "-").toLowerCase();
-
-            if (minorCatName != null) {
-                CategoryMinor catMin = categoryService.getCategoryMinorByName(minorCatName);
-                if (catMin != null)
-                    cnnUrl += "/" + catMin.getName().replaceAll(" ", "-").toLowerCase();
-            }
-        } else {
-            cnnUrl += "/" + "world";
-        }
-
-        return cnnUrl;
-    }
-
-    public List<String> getArticleUrls(String majorCatName, String minorCatName) {
-        String url = this.getUrl(majorCatName, minorCatName);
-
+    public List<String> getArticleUrls(String url) {
         List<String> result = new ArrayList<>();
 
         WebDriver driver = startDriver();
@@ -125,7 +102,7 @@ public class ArticleCrawler extends Crawler {
                 .slug(slugStr)
                 .publishTime(pubDate)
                 .author(authors)
-                .view(0)
+                .views(0)
                 .build();
     }
 
@@ -135,8 +112,7 @@ public class ArticleCrawler extends Crawler {
         List<ArticleImg> articleImgList = new ArrayList<>();
         // 기사 제목
         String headline = driver.findElement(By.className("headline__text")).getText();
-//        ArticleContent titleContent = ArticleContent.builder().contentOrder(++order).article(article).build();
-        ArticleContent titleContent = ArticleContent.builder().build();
+        ArticleContent titleContent = ArticleContent.builder().contentOrder(++order).article(article).build();
         Paragraph titleParagraph = Paragraph.builder().articleContent(titleContent).content(headline).titleYN("Y").build();
         paragraphList.add(titleParagraph);
         // 대표 이미지
@@ -155,11 +131,8 @@ public class ArticleCrawler extends Crawler {
         }
 
         if (repImg != null) {
-            String filename = getRandomFileName(repImg);
-
-//            ArticleContent repContent = ArticleContent.builder().contentOrder(++order).article(article).build();
-            ArticleContent repContent = ArticleContent.builder().build();
-            ArticleImg articleImg = ArticleImg.builder().articleContent(repContent).caption(repImgDesc).url(repImg).filename(filename).repYN("Y").build();
+            ArticleContent imgContent = ArticleContent.builder().contentOrder(++order).article(article).build();
+            ArticleImg articleImg = ArticleImg.builder().articleContent(imgContent).caption(repImgDesc).url(repImg).repYN("Y").build();
 
             articleImgList.add(articleImg);
         }
@@ -169,18 +142,15 @@ public class ArticleCrawler extends Crawler {
         for (WebElement content : contentList) {
             String className = content.getAttribute("class");
             if (className.contains("paragraph")) {
-//                ArticleContent paragraphContent = ArticleContent.builder().contentOrder(++order).article(article).build();
-                ArticleContent paragraphContent = ArticleContent.builder().build();
+                ArticleContent paragraphContent = ArticleContent.builder().contentOrder(++order).article(article).build();
                 Paragraph paragraph = Paragraph.builder().articleContent(paragraphContent).content(content.getText()).titleYN("N").build();
                 paragraphList.add(paragraph);
             } else {
                 String imgUrl = content.findElement(By.tagName("img")).getAttribute("src");
                 String imgDesc = content.findElement(By.className("image__caption")).getText();
-                String filename = getRandomFileName(imgUrl);
 
-//                ArticleContent imgContent = ArticleContent.builder().contentOrder(++order).article(article).build();
-                ArticleContent imgContent = ArticleContent.builder().build();
-                ArticleImg articleImg = ArticleImg.builder().articleContent(imgContent).caption(imgDesc).url(repImg).filename(filename).repYN("N").build();
+                ArticleContent imgContent = ArticleContent.builder().contentOrder(++order).article(article).build();
+                ArticleImg articleImg = ArticleImg.builder().articleContent(imgContent).caption(imgDesc).url(imgUrl).repYN("N").build();
                 articleImgList.add(articleImg);
             }
         }
@@ -189,20 +159,4 @@ public class ArticleCrawler extends Crawler {
         articleImgConsumer.accept(articleImgList);
     }
 
-    private String getRandomFileName(String urlStr) {
-        String filename = null;
-        try {
-            URL url = new URL(urlStr);
-            String pathname = url.getPath();
-            String extName = Optional.ofNullable(pathname)
-                    .filter(s -> s.contains("."))
-                    .map(s -> s.substring(pathname.lastIndexOf(".") + 1))
-                    .orElse(null);
-            filename = UUID.randomUUID().toString() + "." + extName;
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-
-        return filename;
-    }
 }

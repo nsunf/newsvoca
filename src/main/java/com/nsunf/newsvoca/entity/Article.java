@@ -5,6 +5,7 @@ import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
@@ -15,6 +16,7 @@ import java.util.List;
 @Entity
 public class Article extends BaseEntity {
     @Id
+    @Column(name = "article_id")
     private Long id;
     @ManyToOne
     @JoinColumn(name = "category_major_id", nullable = false)
@@ -26,7 +28,7 @@ public class Article extends BaseEntity {
     private String oriUrl;
     @Column(nullable = false)
     private String pathname;
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "VARCHAR2(1024)")
     private String title;
     @Column(nullable = false)
     private String slug;
@@ -36,5 +38,5 @@ public class Article extends BaseEntity {
     private String author;
     @Column(nullable = false)
     @ColumnDefault("0")
-    private int view;
+    private int views;
 }

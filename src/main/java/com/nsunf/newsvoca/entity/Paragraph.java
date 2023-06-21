@@ -12,22 +12,21 @@ import javax.persistence.*;
 @AllArgsConstructor
 public class Paragraph {
     @Id
-    @Column(name = "paragraph_id")
-    private long id;
+    @Column(name = "article_content_id")
+    private Long id;
 
-    @MapsId
     @OneToOne
-    @JoinColumn(name = "paragraph_id")
+    @JoinColumn(name = "article_content_id", nullable = false)
+    @MapsId
     private ArticleContent articleContent;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "VARCHAR2(1024)")
     private String content;
 
-    @Column(nullable = false)
-    @ColumnDefault("")
+    @Column
     private String translation;
 
-    @Column(nullable = false)
+    @Column(name = "title_yn", nullable = false)
     @ColumnDefault("'N'")
     private String titleYN;
 }

@@ -3,11 +3,13 @@ package com.nsunf.newsvoca.service;
 import com.nsunf.newsvoca.crawler.ArticleCrawler;
 import com.nsunf.newsvoca.dto.ArticleDto;
 import com.nsunf.newsvoca.entity.*;
+import com.nsunf.newsvoca.repository.ArticleImgRepository;
 import com.nsunf.newsvoca.repository.ArticleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.ExecutorService;
@@ -21,8 +23,11 @@ import java.util.stream.Collectors;
 public class ArticleService {
 
     private final ArticleCrawler articleCrawler;
-    private final ArticleRepository articleRepository;
     private final CategoryService categoryService;
+    private final ParagraphService paragraphService;
+
+    private final ArticleRepository articleRepository;
+    private final ArticleImgRepository articleImgRepository;
 
     public Long getNextId() {
         return articleRepository.findNextId().orElse(0L) + 1L;
@@ -31,11 +36,23 @@ public class ArticleService {
 
     public List<ArticleDto> getArticles(String majorCatName, String minorCatName) {
         // crawler를 이용한 데이터 갱신
-        List<String> articleUrlList = articleCrawler.getArticleUrls(majorCatName, minorCatName);
+        String cnnUrl = "https://edition.cnn.com";
+        if (minorCatName != null)
+            cnnUrl += "/" + categoryService.getCategoryMinorByName(minorCatName).getName().replaceAll(" ", "-").toLowerCase();
+        else if (majorCatName != null)
+            cnnUrl += "/" + categoryService.getCategoryMajorByName(majorCatName).getName().replaceAll(" ", "-").toLowerCase();
+        else
+            cnnUrl += "/world";
+
+        List<String> articleUrlList = articleCrawler.getArticleUrls(cnnUrl);
         saveArticles(articleUrlList);
         // db에서 데이터 조회 후 dto 반환
 
-        return null;
+        List<ArticleDto> result = new ArrayList<>();
+
+//        result = articleRepository.getArticleDtoByCategoryMajorName(majorCatName);
+
+        return result;
     }
 
     public void saveArticles(List<String> urlList) {
@@ -43,7 +60,7 @@ public class ArticleService {
         System.out.println("탐색된 url : " + urlList.size() + ", 저장할 url : " + newArticleUrls.size());
         long nextId = getNextId();
 
-        ExecutorService executors = Executors.newCachedThreadPool();
+        ExecutorService executors = Executors.newFixedThreadPool(4);
 
         Vector<Article> articleList = new Vector<>();
         Vector<Paragraph> paragraphList = new Vector<>();
@@ -75,13 +92,16 @@ public class ArticleService {
             e.printStackTrace();
         }
 
-        articleList.forEach(System.out::println);
-        paragraphList.forEach(System.out::println);
-        articleImgList.forEach(System.out::println);
+        articleRepository.saveAllAndFlush(articleList);
+
+        paragraphService.saveParagraphs(paragraphList);
+        articleImgRepository.saveAll(articleImgList);
+
+        System.out.println(articleList.size() + " articles saved");
+        System.out.println(paragraphList.size() + " paragraphs saved");
+        System.out.println(articleImgList.size() + " article imgs saved");
 
         System.out.println("--end--");
-
-
     }
 
 }

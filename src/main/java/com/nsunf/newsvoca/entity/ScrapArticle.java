@@ -8,7 +8,7 @@ import javax.persistence.*;
 
 @Getter
 @Setter
-@Entity
+//@Entity
 public class ScrapArticle extends BaseEntity {
     @EmbeddedId
     private ScrapArticleId id;

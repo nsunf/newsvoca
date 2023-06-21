@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 @Getter
 @Setter
-@Entity
+//@Entity
 public class Scrapbook extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

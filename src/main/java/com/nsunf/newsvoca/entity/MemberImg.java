@@ -11,6 +11,7 @@ import javax.persistence.*;
 public class MemberImg extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "member_img_id")
     private Long id;
     @OneToOne
     @JoinColumn(name = "member_id", nullable = false)

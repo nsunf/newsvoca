@@ -12,6 +12,7 @@ import javax.persistence.*;
 public class Word extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "world")
     private Long id;
     @Column(nullable = false, unique = true)
     private String text;
