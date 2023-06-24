@@ -4,7 +4,9 @@ import com.github.slugify.Slugify;
 import com.nsunf.newsvoca.entity.*;
 import com.nsunf.newsvoca.service.CategoryService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.function.Consumer;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ArticleCrawler extends Crawler {
@@ -47,9 +50,10 @@ public class ArticleCrawler extends Crawler {
         driver.get(url);
 
         Article article = scrapArticle(driver, nextId);
-
-        articleConsumer.accept(article);
-        scrapArticleContents(driver, article, paragraphConsumer, articleImgConsumer);
+        if (article != null) {
+            articleConsumer.accept(article);
+            scrapArticleContents(driver, article, paragraphConsumer, articleImgConsumer);
+        }
 
         driver.quit();
     }
@@ -70,8 +74,7 @@ public class ArticleCrawler extends Crawler {
         LocalDateTime pubDate = LocalDateTime.parse(editedTimeStamp, formatter);
 
         // pathname 생성
-        String[] splittedUrl = url.split("/");
-        String cat = splittedUrl[splittedUrl.length - 3];
+        String cat = url.split("/")[6];
 
         // slug 생성
         Slugify slg = Slugify.builder().build();
@@ -82,7 +85,12 @@ public class ArticleCrawler extends Crawler {
 
         if (majorCat == null) {
             minorCat = categoryService.getCategoryMinorByPathame(cat);
-            majorCat = minorCat.getCategoryMajor();
+            if (minorCat != null) majorCat = minorCat.getCategoryMajor();
+        }
+
+        if (majorCat == null && minorCat == null) {
+            log.warn("확인 되지 않은 카테고리 이름 : {}", cat);
+            return null;
         }
 
         String pathname = String.join("/",
@@ -112,8 +120,7 @@ public class ArticleCrawler extends Crawler {
         List<ArticleImg> articleImgList = new ArrayList<>();
         // 기사 제목
         String headline = driver.findElement(By.className("headline__text")).getText();
-        ArticleContent titleContent = ArticleContent.builder().contentOrder(++order).article(article).build();
-        Paragraph titleParagraph = Paragraph.builder().articleContent(titleContent).content(headline).titleYN("Y").build();
+        Paragraph titleParagraph = Paragraph.builder().contentOrder(++order).article(article).content(headline).titleYN("Y").build();
         paragraphList.add(titleParagraph);
         // 대표 이미지
         String repImg = null;
@@ -124,16 +131,22 @@ public class ArticleCrawler extends Crawler {
 
         if (imgList.size() > 0) {
             repImg = imgList.get(0).getAttribute("src");
-            repImgDesc = repMediaSection.findElement(By.className("image__caption")).getText();
+            try {
+                repImgDesc = repMediaSection.findElement(By.className("image__caption")).getText();
+            } catch (NoSuchElementException e) {
+                log.warn("대표 이미지의 캡션을 찾을 수 없음 : url({})", driver.getCurrentUrl());
+            }
         } else if (videoList.size() > 0) {
             repImg = videoList.get(0).getAttribute("poster");
-            repImgDesc = repMediaSection.findElement(By.className("video-resource__headline")).getText();
+            try {
+                repImgDesc = repMediaSection.findElement(By.className("video-resource__headline")).getText();
+            } catch (NoSuchElementException e) {
+                log.warn("대표 비디오의 캡션을 찾을 수 없음 : url({})", driver.getCurrentUrl());
+            }
         }
 
-        if (repImg != null) {
-            ArticleContent imgContent = ArticleContent.builder().contentOrder(++order).article(article).build();
-            ArticleImg articleImg = ArticleImg.builder().articleContent(imgContent).caption(repImgDesc).url(repImg).repYN("Y").build();
-
+        if (repImg != null && !repImg.isBlank()) {
+            ArticleImg articleImg = ArticleImg.builder().contentOrder(++order).article(article).caption(repImgDesc).url(repImg).repYN("Y").build();
             articleImgList.add(articleImg);
         }
         // 문장 및 이미지
@@ -141,17 +154,32 @@ public class ArticleCrawler extends Crawler {
 
         for (WebElement content : contentList) {
             String className = content.getAttribute("class");
-            if (className.contains("paragraph")) {
-                ArticleContent paragraphContent = ArticleContent.builder().contentOrder(++order).article(article).build();
-                Paragraph paragraph = Paragraph.builder().articleContent(paragraphContent).content(content.getText()).titleYN("N").build();
+            // 문장
+            if (className.contains("paragraph") || className.contains("subheader")) {
+                Paragraph paragraph = Paragraph.builder().contentOrder(++order).article(article).content(content.getText()).titleYN("N").build();
                 paragraphList.add(paragraph);
-            } else {
+            // 이미지
+            } else if (className.contains("image")) {
                 String imgUrl = content.findElement(By.tagName("img")).getAttribute("src");
-                String imgDesc = content.findElement(By.className("image__caption")).getText();
+                String imgDesc = null;
+                try {
+                    imgDesc = content.findElement(By.className("image__caption")).getText();
+                } catch (NoSuchElementException e) {
+                    log.warn("해당 이미지의 캡션을 찾을 수 없음 : url({}), imgUrl({})", driver.getCurrentUrl(), imgUrl);
+                }
 
-                ArticleContent imgContent = ArticleContent.builder().contentOrder(++order).article(article).build();
-                ArticleImg articleImg = ArticleImg.builder().articleContent(imgContent).caption(imgDesc).url(imgUrl).repYN("N").build();
+                if (imgUrl != null && !imgUrl.isBlank()) {
+                    ArticleImg articleImg = ArticleImg.builder().contentOrder(++order).article(article).caption(imgDesc).url(imgUrl).repYN("N").build();
+                    articleImgList.add(articleImg);
+                }
+            // 비디오 이미지
+            } else if (className.contains("video-resource")) {
+                String thumbnailUrl = content.findElement(By.tagName("video")).getAttribute("poster");
+                String thumbnailCaption = content.findElement(By.className("video-resource__headline")).getText();
+                ArticleImg articleImg = ArticleImg.builder().contentOrder(++order).article(article).caption(thumbnailCaption).url(thumbnailUrl).repYN("N").build();
                 articleImgList.add(articleImg);
+            } else {
+                log.warn("식별 되지 않은 콘텐츠 타입 : url({}), className({})", driver.getCurrentUrl(), className);
             }
         }
 

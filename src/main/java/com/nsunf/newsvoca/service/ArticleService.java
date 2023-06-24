@@ -6,6 +6,8 @@ import com.nsunf.newsvoca.entity.*;
 import com.nsunf.newsvoca.repository.ArticleImgRepository;
 import com.nsunf.newsvoca.repository.ArticleRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import oracle.jdbc.OracleDatabaseException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,7 +19,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-@Transactional
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ArticleService {
@@ -50,14 +52,15 @@ public class ArticleService {
 
         List<ArticleDto> result = new ArrayList<>();
 
-//        result = articleRepository.getArticleDtoByCategoryMajorName(majorCatName);
+        result = articleRepository.getArticleDtoByCategoryMajorName(majorCatName);
 
         return result;
     }
 
+    @Transactional
     public void saveArticles(List<String> urlList) {
         List<String> newArticleUrls = urlList.stream().filter(url -> !articleRepository.existsByOriUrl(url)).collect(Collectors.toList());
-        System.out.println("탐색된 url : " + urlList.size() + ", 저장할 url : " + newArticleUrls.size());
+        log.debug("탐색된 url : {}, 저장할 url : {}", urlList.size(), newArticleUrls.size());
         long nextId = getNextId();
 
         ExecutorService executors = Executors.newFixedThreadPool(4);
@@ -78,8 +81,7 @@ public class ArticleService {
                             paragraphList::addAll,
                             articleImgList::addAll);
                 } catch (Exception e) {
-                    System.err.println("url ---> " + url);
-                    e.printStackTrace();
+                    log.error(e.getMessage());
                 }
             });
         }
@@ -89,19 +91,16 @@ public class ArticleService {
         try {
             executors.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
 
         articleRepository.saveAllAndFlush(articleList);
-
         paragraphService.saveParagraphs(paragraphList);
         articleImgRepository.saveAll(articleImgList);
 
-        System.out.println(articleList.size() + " articles saved");
-        System.out.println(paragraphList.size() + " paragraphs saved");
-        System.out.println(articleImgList.size() + " article imgs saved");
-
-        System.out.println("--end--");
+        log.debug("{} 개의 기사 저장됨", articleList.size());
+        log.debug("{} 개의 문장 저장됨", paragraphList.size());
+        log.debug("{} 개의 이미지 저장됨", articleImgList.size());
     }
 
 }

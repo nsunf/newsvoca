@@ -1,24 +1,30 @@
 package com.nsunf.newsvoca.entity;
 
+import com.nsunf.newsvoca.entity.composite_key.ParagraphId;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Data
+@EqualsAndHashCode(callSuper = false)
 @Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Paragraph {
+@IdClass(ParagraphId.class)
+public class Paragraph extends BaseEntity {
     @Id
-    @Column(name = "article_content_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "article_content_id", nullable = false)
-    @MapsId
-    private ArticleContent articleContent;
+    @Id
+    private Long contentOrder;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "article_id", nullable = false)
+    private Article article;
 
     @Column(nullable = false, columnDefinition = "VARCHAR2(1024)")
     private String content;

@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
+//@Entity
 public class ArticleContent extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

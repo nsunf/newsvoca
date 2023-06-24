@@ -5,7 +5,6 @@ import com.nsunf.newsvoca.dto.QArticleDto;
 import com.nsunf.newsvoca.entity.QArticle;
 import com.nsunf.newsvoca.entity.QArticleImg;
 import com.nsunf.newsvoca.entity.QParagraph;
-import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -25,26 +24,24 @@ public class ArticleRepositoryCustomImpl implements ArticleRepositoryCustom {
         QParagraph paragraph = QParagraph.paragraph;
         QArticleImg articleImg = QArticleImg.articleImg;
 
-        List<ArticleDto> result = qf
+        qf
                 .select(new QArticleDto(article, paragraph.content, articleImg.url, articleImg.caption))
                 .from(article)
                 .join(paragraph)
-                .on(paragraph.articleContent.article.eq(article))
-                .join(articleImg)
-                .on(articleImg.repYN.eq("Y"))
-                .where(
-                        article.categoryMajor.name.eq(categoryMajorName)
-                                .and(
-                                        paragraph.articleContent.contentOrder.eq(
-                                                JPAExpressions.select(paragraph.articleContent.contentOrder.min())
-                                                        .from(paragraph.articleContent)
-                                                        .where(paragraph.articleContent.article.eq(article)
-                                                        )
-                        )
-                ))
-                .orderBy(article.publishTime.desc())
+                .on(
+                        paragraph.article.eq(article)
+                                .and(paragraph.titleYN.eq("N"))
+                                .and(paragraph.contentOrder.eq(
+                                        qf.select(paragraph.contentOrder.min()).from(paragraph).where(paragraph.article.eq(article))
+                                ))
+
+                ).join(articleImg)
+                .on(articleImg.article.eq(article).and(articleImg.repYN.eq("Y")))
+                .where(article.categoryMajor.name.eq(categoryMajorName))
                 .limit(20)
-                .fetch();
+                .fetch()
+                .forEach(System.out::println);
+
         return null;
     }
 
