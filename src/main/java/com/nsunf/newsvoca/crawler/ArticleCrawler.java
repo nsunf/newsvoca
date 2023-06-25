@@ -94,9 +94,9 @@ public class ArticleCrawler extends Crawler {
         }
 
         String pathname = String.join("/",
-                "/article",
+                "/api/articles",
                 String.valueOf(nextId),
-                minorCat == null ? majorCat.getName() : minorCat.getName(),
+                minorCat == null ? majorCat.getName().toLowerCase() : minorCat.getName().toLowerCase(),
                 slugStr
         );
 
@@ -151,12 +151,17 @@ public class ArticleCrawler extends Crawler {
         }
         // 문장 및 이미지
         List<WebElement> contentList = driver.findElements(By.cssSelector(".article__content > .paragraph, .article__content > .image"));
+        boolean previewSaved = false;
 
         for (WebElement content : contentList) {
             String className = content.getAttribute("class");
             // 문장
             if (className.contains("paragraph") || className.contains("subheader")) {
                 Paragraph paragraph = Paragraph.builder().contentOrder(++order).article(article).content(content.getText()).titleYN("N").build();
+                if (!previewSaved) {
+                    paragraph.setPreviewYN("Y");
+                    previewSaved = true;
+                }
                 paragraphList.add(paragraph);
             // 이미지
             } else if (className.contains("image")) {

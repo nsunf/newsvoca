@@ -4,12 +4,12 @@ import com.nsunf.newsvoca.entity.Article;
 import com.nsunf.newsvoca.entity.ArticleImg;
 import com.nsunf.newsvoca.entity.Paragraph;
 import com.querydsl.core.annotations.QueryProjection;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 public class ArticleDto {
     private Long id;

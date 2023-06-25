@@ -32,7 +32,11 @@ public class Paragraph extends BaseEntity {
     @Column
     private String translation;
 
-    @Column(name = "title_yn", nullable = false)
+    @Column(nullable = false)
     @ColumnDefault("'N'")
     private String titleYN;
+
+    @Column
+    @ColumnDefault("'N'")
+    private String previewYN;
 }

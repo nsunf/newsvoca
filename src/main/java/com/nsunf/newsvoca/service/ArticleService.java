@@ -1,7 +1,7 @@
 package com.nsunf.newsvoca.service;
 
 import com.nsunf.newsvoca.crawler.ArticleCrawler;
-import com.nsunf.newsvoca.dto.ArticleDto;
+import com.nsunf.newsvoca.dto.*;
 import com.nsunf.newsvoca.entity.*;
 import com.nsunf.newsvoca.repository.ArticleImgRepository;
 import com.nsunf.newsvoca.repository.ArticleRepository;
@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class ArticleService {
 
@@ -36,7 +37,7 @@ public class ArticleService {
     }
 
 
-    public List<ArticleDto> getArticles(String majorCatName, String minorCatName) {
+    public List<ArticleDto> getArticleDtoList(String majorCatName, String minorCatName) {
         // crawler를 이용한 데이터 갱신
         String cnnUrl = "https://edition.cnn.com";
         if (minorCatName != null)
@@ -48,19 +49,38 @@ public class ArticleService {
 
         List<String> articleUrlList = articleCrawler.getArticleUrls(cnnUrl);
         saveArticles(articleUrlList);
+
         // db에서 데이터 조회 후 dto 반환
-
         List<ArticleDto> result = new ArrayList<>();
-
-        result = articleRepository.getArticleDtoByCategoryMajorName(majorCatName);
+        if (minorCatName != null)
+            result = articleRepository.getArticleDtoByCategoryMinorName(minorCatName, 20);
+        else if (majorCatName != null)
+            result = articleRepository.getArticleDtoByCategoryMajorName(majorCatName, 20);
+        else
+            result = articleRepository.getArticleDtoByCategoryMajorName("world", 20);
 
         return result;
     }
 
-    @Transactional
+    public ArticleDetailDto getArticleDetailDto(Long articleId) {
+        ArticleDetailDto articleDetailDto = articleRepository.getArticleDetailById(articleId);
+        List<ParagraphDto> paragraphContents = paragraphService.getParagraphContents(articleId);
+        List<ArticleImgDto> articleImgContents = articleImgRepository.getArticleImgContentsByArticleId(articleId);
+
+        List<ArticleContentDto> contents = new ArrayList<>();
+        contents.addAll(paragraphContents);
+        contents.addAll(articleImgContents);
+
+        contents.sort((lhs, rhs) -> lhs.getContentOrder() < rhs.getContentOrder() ? -1 : 1);
+
+        articleDetailDto.setContents(contents);
+
+        return articleDetailDto;
+    }
+
     public void saveArticles(List<String> urlList) {
         List<String> newArticleUrls = urlList.stream().filter(url -> !articleRepository.existsByOriUrl(url)).collect(Collectors.toList());
-        log.debug("탐색된 url : {}, 저장할 url : {}", urlList.size(), newArticleUrls.size());
+        log.info("탐색된 url : {}, 저장할 url : {}", urlList.size(), newArticleUrls.size());
         long nextId = getNextId();
 
         ExecutorService executors = Executors.newFixedThreadPool(4);
@@ -98,9 +118,9 @@ public class ArticleService {
         paragraphService.saveParagraphs(paragraphList);
         articleImgRepository.saveAll(articleImgList);
 
-        log.debug("{} 개의 기사 저장됨", articleList.size());
-        log.debug("{} 개의 문장 저장됨", paragraphList.size());
-        log.debug("{} 개의 이미지 저장됨", articleImgList.size());
+        log.info("{} 개의 기사 저장됨", articleList.size());
+        log.info("{} 개의 문장 저장됨", paragraphList.size());
+        log.info("{} 개의 이미지 저장됨", articleImgList.size());
     }
 
 }

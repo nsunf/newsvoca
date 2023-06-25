@@ -1,5 +1,6 @@
 package com.nsunf.newsvoca.crawler;
 
+import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.PageLoadStrategy;
 import org.openqa.selenium.WebDriver;
@@ -10,6 +11,7 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 public class Crawler {
     public Crawler() {
         System.setProperty("webdriver.chrome.driver", "src/main/resources/chromedriver");
@@ -37,8 +39,7 @@ public class Crawler {
     }
 
     public void loadPage(WebDriver driver, String url) {
-        System.out.println("-- Crawler --------------------");
-        System.out.println(url + " 접속중");
+        log.info("페이지 이동 중 : {}", url);
         long beforeTime = System.currentTimeMillis();
         driver.get(url);
 
@@ -54,7 +55,7 @@ public class Crawler {
                 break;
             } else {
                 tmp = scrollHeight;
-                System.out.println(++loopCnt + " 번째 스크롤 후 로딩중");
+                log.info("{} 번째 스크롤 후 로딩중", ++loopCnt);
             }
 
             try {
@@ -66,9 +67,9 @@ public class Crawler {
 
         long afterTime = System.currentTimeMillis();
         long secDiffTime = (afterTime - beforeTime);
-        System.out.println("로딩 완료");
-        System.out.println("소요 시간 : " + secDiffTime + "ms");
-        System.out.println("스크롤 횟수 : " + loopCnt);
-        System.out.println("페이지 길이 : " + tmp + "px");
+        log.info("로딩 완료");
+        log.info("소요 시간 : {}ms", secDiffTime);
+        log.info("스크롤 횟수 : {}", loopCnt);
+        log.info("페이지 길이 : {}px", tmp);
     }
 }
