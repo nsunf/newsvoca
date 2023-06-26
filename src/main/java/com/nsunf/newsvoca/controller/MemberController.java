@@ -1,48 +1,57 @@
 package com.nsunf.newsvoca.controller;
 
 import com.nsunf.newsvoca.config.CustomUserDetails;
-import com.nsunf.newsvoca.config.TokenProvider;
-import com.nsunf.newsvoca.dto.LoginFormDto;
 import com.nsunf.newsvoca.dto.LoginFormDto;
 import com.nsunf.newsvoca.dto.MemberFormDto;
-import com.nsunf.newsvoca.entity.Member;
+import com.nsunf.newsvoca.dto.TokenDto;
 import com.nsunf.newsvoca.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
 
+@Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/api/user")
 @RestController
 public class MemberController {
-    private final TokenProvider tokenProvider;
     private final MemberService memberService;
-    private final PasswordEncoder pwEncoder;
+
     @PostMapping("/signup")
     public ResponseEntity<Long> signup(@RequestBody MemberFormDto memberFormDto) {
-        Long id = this.memberService.createMember(memberFormDto, this.pwEncoder);
+        Long id = this.memberService.signup(memberFormDto);
 
-        if (id != null)
-            return new ResponseEntity<>(id, HttpStatus.OK);
-        else
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(id, HttpStatus.OK);
     }
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginFormDto loginFormDto) {
-        try {
-            Member member = memberService.getMember(loginFormDto.getEmail(), loginFormDto.getPassword(), pwEncoder);
-            CustomUserDetails userDetails = new CustomUserDetails(member);
+        TokenDto token = this.memberService.login(loginFormDto);
 
-            String token = tokenProvider.createToken(userDetails.getUsername(), userDetails.getRoles());
-            return new ResponseEntity<>(token, HttpStatus.OK);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("Authorization", "Bearer " + token);
+
+        return new ResponseEntity<>(token.getAccessToken(), httpHeaders, HttpStatus.OK);
+    }
+
+    @GetMapping("/test")
+    public String test() {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        try {
+            CustomUserDetails cd = (CustomUserDetails) userDetails;
+            log.info(cd.toString());
         } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>("login failed", HttpStatus.BAD_REQUEST);
+            log.error(e.getMessage());
         }
+
+        log.info(userDetails.toString());
+
+        return "done";
     }
 }
