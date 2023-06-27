@@ -47,4 +47,13 @@ public class Member extends BaseEntity {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private MemberStatus status;
+
+    public void update(String name, String nickname, String email, String phone1, String phone2, String phone3, String address1, String address2) {
+        this.name = name;
+        this.nickname = nickname;
+        this.email = email;
+        this.phone = String.join("-", phone1, phone2, phone3);
+        this.address1 = address1;
+        this.address2 = address2;
+    }
 }

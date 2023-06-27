@@ -1,13 +1,13 @@
 package com.nsunf.newsvoca.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Getter
 @Setter
 @Entity
+@NoArgsConstructor
 public class MemberImg extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -22,4 +22,8 @@ public class MemberImg extends BaseEntity {
     private String filename;
     @Column
     private String oriImgName;
+
+    public MemberImg(Member member) {
+        this.member = member;
+    }
 }

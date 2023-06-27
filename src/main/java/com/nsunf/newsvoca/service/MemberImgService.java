@@ -1,5 +1,7 @@
 package com.nsunf.newsvoca.service;
 
+import com.nsunf.newsvoca.dto.MemberImgDto;
+import com.nsunf.newsvoca.entity.Member;
 import com.nsunf.newsvoca.entity.MemberImg;
 import com.nsunf.newsvoca.repository.MemberImgRepository;
 import lombok.RequiredArgsConstructor;
@@ -43,9 +45,27 @@ public class MemberImgService {
         memberImgRepository.save(memberImg);
     }
 
-    public String getMemberImgUrlByEmail(String email) {
-        Optional<MemberImg> memberImg = memberImgRepository.findByMemberEmail(email);
-        return memberImg.map(MemberImg::getUrl).orElse(null);
+//    public String getMemberImgUrlByEmail(String email) {
+//        Optional<MemberImg> memberImg = memberImgRepository.findByMemberEmail(email);
+//        return memberImg.map(MemberImg::getUrl).orElse(null);
+//    }
+
+    public MemberImg getMemberImgByMember(Member member) {
+        return memberImgRepository.findByMember(member).orElseGet(() -> {
+            return memberImgRepository.save(new MemberImg(member));
+        });
     }
+
+//    public MemberImgDto getMemberImgDtoByMember(Member member) {
+//        MemberImg memberImg = this.getMemberImgByMember(member);
+//
+//        return MemberImgDto.builder()
+//                .id(memberImg.getId())
+//                .memberId(member.getId())
+//                .url(memberImg.getUrl())
+//                .filename(memberImg.getFilename())
+//                .oriImgName(memberImg.getOriImgName())
+//                .build();
+//    }
 
 }
