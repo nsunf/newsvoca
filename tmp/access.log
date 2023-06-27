@@ -7301,3 +7301,132 @@ Caused by: java.lang.ClassNotFoundException: com.nsunf.newsvoca.config.TokenProv
 15:25:17 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
 15:25:17 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
 15:25:17 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+15:30:46 INFO  c.nsunf.newsvoca.NewsvocaApplication - Starting NewsvocaApplication using Java 11.0.19 on yangjunsuui-MacBookPro.local with PID 37624 (/Users/yjs/intelliJ/newsvoca/build/classes/java/main started by yjs in /Users/yjs/intelliJ/newsvoca)
+15:30:46 INFO  c.nsunf.newsvoca.NewsvocaApplication - No active profile set, falling back to 1 default profile: "default"
+15:30:46 INFO  o.s.b.d.restart.ChangeableUrls - The Class-Path manifest attribute in /Users/yjs/.gradle/caches/modules-2/files-2.1/com.oracle.database.jdbc/ojdbc8/21.9.0.0/a68f29ad2376bdb8c04a87cda70c62907995855d/ojdbc8-21.9.0.0.jar referenced one or more files that do not exist: file:/Users/yjs/.gradle/caches/modules-2/files-2.1/com.oracle.database.jdbc/ojdbc8/21.9.0.0/a68f29ad2376bdb8c04a87cda70c62907995855d/oraclepki.jar
+15:30:46 INFO  o.s.b.d.restart.ChangeableUrls - The Class-Path manifest attribute in /Users/yjs/.gradle/caches/modules-2/files-2.1/xalan/xalan/2.7.2/d55d3f02a56ec4c25695fe67e1334ff8c2ecea23/xalan-2.7.2.jar referenced one or more files that do not exist: file:/Users/yjs/.gradle/caches/modules-2/files-2.1/xalan/xalan/2.7.2/d55d3f02a56ec4c25695fe67e1334ff8c2ecea23/xercesImpl.jar,file:/Users/yjs/.gradle/caches/modules-2/files-2.1/xalan/xalan/2.7.2/d55d3f02a56ec4c25695fe67e1334ff8c2ecea23/xml-apis.jar,file:/Users/yjs/.gradle/caches/modules-2/files-2.1/xalan/xalan/2.7.2/d55d3f02a56ec4c25695fe67e1334ff8c2ecea23/serializer.jar
+15:30:46 INFO  o.s.b.d.restart.ChangeableUrls - The Class-Path manifest attribute in /Users/yjs/.gradle/caches/modules-2/files-2.1/xalan/serializer/2.7.2/24247f3bb052ee068971393bdb83e04512bb1c3c/serializer-2.7.2.jar referenced one or more files that do not exist: file:/Users/yjs/.gradle/caches/modules-2/files-2.1/xalan/serializer/2.7.2/24247f3bb052ee068971393bdb83e04512bb1c3c/xml-apis.jar
+15:30:46 INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+15:30:46 INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+15:30:47 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+15:30:47 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 92 ms. Found 8 JPA repository interfaces.
+15:30:48 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+15:30:48 INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+15:30:48 INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+15:30:48 INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.75]
+15:30:48 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+15:30:48 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2016 ms
+15:30:48 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+15:30:48 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+15:30:48 INFO  o.s.b.a.h.H2ConsoleAutoConfiguration - H2 console available at '/h2-console'. Database available at 'jdbc:oracle:thin:@localhost:49153/xe'
+15:30:49 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+15:30:49 INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 5.6.15.Final
+15:30:49 INFO  o.h.annotations.common.Version - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+15:30:49 INFO  org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.Oracle10gDialect
+15:30:59 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+15:30:59 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+15:31:00 INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@750ff798, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@312f8562, org.springframework.security.web.context.SecurityContextPersistenceFilter@1f0b5e57, org.springframework.security.web.header.HeaderWriterFilter@3e79bde5, org.springframework.security.web.authentication.logout.LogoutFilter@180b3b06, com.nsunf.newsvoca.config.JwtAuthenticationFilter@764e204a, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@362b73a2, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@57d1bf2e, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@4c61b533, org.springframework.security.web.session.SessionManagementFilter@387235e9, org.springframework.security.web.access.ExceptionTranslationFilter@417cd1c1, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@3b3bf6cf]
+15:31:01 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+15:31:01 INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+15:31:01 INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+15:31:01 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+15:31:01 INFO  c.nsunf.newsvoca.NewsvocaApplication - Started NewsvocaApplication in 15.765 seconds (JVM running for 16.783)
+15:34:28 INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 17 class path changes (0 additions, 17 deletions, 0 modifications)
+15:34:28 INFO  o.a.coyote.http11.Http11NioProtocol - Pausing ProtocolHandler ["http-nio-8080"]
+15:34:28 INFO  o.a.catalina.core.StandardService - Stopping service [Tomcat]
+15:34:28 INFO  o.a.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["http-nio-8080"]
+15:34:28 INFO  o.a.coyote.http11.Http11NioProtocol - Destroying ProtocolHandler ["http-nio-8080"]
+15:34:28 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+15:34:28 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+15:34:28 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+15:34:28 INFO  c.nsunf.newsvoca.NewsvocaApplication - Starting NewsvocaApplication using Java 11.0.19 on yangjunsuui-MacBookPro.local with PID 37624 (/Users/yjs/intelliJ/newsvoca/build/classes/java/main started by yjs in /Users/yjs/intelliJ/newsvoca)
+15:34:28 INFO  c.nsunf.newsvoca.NewsvocaApplication - No active profile set, falling back to 1 default profile: "default"
+15:34:29 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+15:34:29 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 62 ms. Found 8 JPA repository interfaces.
+15:34:29 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+15:34:29 INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+15:34:29 INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+15:34:29 INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.75]
+15:34:29 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+15:34:29 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 711 ms
+15:34:29 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Starting...
+15:34:29 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Start completed.
+15:34:29 INFO  o.s.b.a.h.H2ConsoleAutoConfiguration - H2 console available at '/h2-console'. Database available at 'jdbc:oracle:thin:@localhost:49153/xe'
+15:34:29 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+15:34:29 INFO  org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.Oracle10gDialect
+15:34:39 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+15:34:39 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+15:34:39 INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@4738a94a, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@3a9c7f0e, org.springframework.security.web.context.SecurityContextPersistenceFilter@1536af15, org.springframework.security.web.header.HeaderWriterFilter@2c536088, org.springframework.security.web.authentication.logout.LogoutFilter@17d04669, com.nsunf.newsvoca.config.JwtAuthenticationFilter@7883458a, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4fece689, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@788c98dc, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@7cfe03e7, org.springframework.security.web.session.SessionManagementFilter@4860e3a2, org.springframework.security.web.access.ExceptionTranslationFilter@209f43f1, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@7ebf48dd]
+15:34:39 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+15:34:39 INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+15:34:39 INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+15:34:39 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+15:34:39 INFO  c.nsunf.newsvoca.NewsvocaApplication - Started NewsvocaApplication in 10.745 seconds (JVM running for 234.817)
+15:34:39 INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+15:34:40 INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 17 class path changes (17 additions, 0 deletions, 0 modifications)
+15:34:40 INFO  o.a.coyote.http11.Http11NioProtocol - Pausing ProtocolHandler ["http-nio-8080"]
+15:34:40 INFO  o.a.catalina.core.StandardService - Stopping service [Tomcat]
+15:34:40 INFO  o.a.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["http-nio-8080"]
+15:34:40 INFO  o.a.coyote.http11.Http11NioProtocol - Destroying ProtocolHandler ["http-nio-8080"]
+15:34:40 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+15:34:40 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Shutdown initiated...
+15:34:40 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Shutdown completed.
+15:34:41 INFO  c.nsunf.newsvoca.NewsvocaApplication - Starting NewsvocaApplication using Java 11.0.19 on yangjunsuui-MacBookPro.local with PID 37624 (/Users/yjs/intelliJ/newsvoca/build/classes/java/main started by yjs in /Users/yjs/intelliJ/newsvoca)
+15:34:41 INFO  c.nsunf.newsvoca.NewsvocaApplication - No active profile set, falling back to 1 default profile: "default"
+15:34:41 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+15:34:41 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 35 ms. Found 8 JPA repository interfaces.
+15:34:41 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+15:34:41 INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+15:34:41 INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+15:34:41 INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.75]
+15:34:41 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+15:34:41 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 341 ms
+15:34:41 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-3 - Starting...
+15:34:41 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-3 - Start completed.
+15:34:41 INFO  o.s.b.a.h.H2ConsoleAutoConfiguration - H2 console available at '/h2-console'. Database available at 'jdbc:oracle:thin:@localhost:49153/xe'
+15:34:41 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+15:34:41 INFO  org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.Oracle10gDialect
+15:34:50 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+15:34:50 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+15:34:50 INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@17af4d59, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@6d6d5e2f, org.springframework.security.web.context.SecurityContextPersistenceFilter@291d5ee7, org.springframework.security.web.header.HeaderWriterFilter@2d2c4db, org.springframework.security.web.authentication.logout.LogoutFilter@2d542a19, com.nsunf.newsvoca.config.JwtAuthenticationFilter@10553f4c, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@9d3a2e5, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@1d334b18, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@6a9f7cb9, org.springframework.security.web.session.SessionManagementFilter@108c7637, org.springframework.security.web.access.ExceptionTranslationFilter@3dd3b7a6, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@1a3c018e]
+15:34:50 WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+15:34:51 INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+15:34:51 INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+15:34:51 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+15:34:51 INFO  c.nsunf.newsvoca.NewsvocaApplication - Started NewsvocaApplication in 10.053 seconds (JVM running for 246.37)
+15:34:51 INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+15:35:09 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+15:35:09 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-3 - Shutdown initiated...
+15:35:09 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-3 - Shutdown completed.
+15:35:26 INFO  c.nsunf.newsvoca.NewsvocaApplication - Starting NewsvocaApplication using Java 11.0.19 on yangjunsuui-MacBookPro.local with PID 37687 (/Users/yjs/intelliJ/newsvoca/build/classes/java/main started by yjs in /Users/yjs/intelliJ/newsvoca)
+15:35:26 INFO  c.nsunf.newsvoca.NewsvocaApplication - No active profile set, falling back to 1 default profile: "default"
+15:35:26 INFO  o.s.b.d.restart.ChangeableUrls - The Class-Path manifest attribute in /Users/yjs/.gradle/caches/modules-2/files-2.1/com.oracle.database.jdbc/ojdbc8/21.9.0.0/a68f29ad2376bdb8c04a87cda70c62907995855d/ojdbc8-21.9.0.0.jar referenced one or more files that do not exist: file:/Users/yjs/.gradle/caches/modules-2/files-2.1/com.oracle.database.jdbc/ojdbc8/21.9.0.0/a68f29ad2376bdb8c04a87cda70c62907995855d/oraclepki.jar
+15:35:26 INFO  o.s.b.d.restart.ChangeableUrls - The Class-Path manifest attribute in /Users/yjs/.gradle/caches/modules-2/files-2.1/xalan/xalan/2.7.2/d55d3f02a56ec4c25695fe67e1334ff8c2ecea23/xalan-2.7.2.jar referenced one or more files that do not exist: file:/Users/yjs/.gradle/caches/modules-2/files-2.1/xalan/xalan/2.7.2/d55d3f02a56ec4c25695fe67e1334ff8c2ecea23/xercesImpl.jar,file:/Users/yjs/.gradle/caches/modules-2/files-2.1/xalan/xalan/2.7.2/d55d3f02a56ec4c25695fe67e1334ff8c2ecea23/xml-apis.jar,file:/Users/yjs/.gradle/caches/modules-2/files-2.1/xalan/xalan/2.7.2/d55d3f02a56ec4c25695fe67e1334ff8c2ecea23/serializer.jar
+15:35:26 INFO  o.s.b.d.restart.ChangeableUrls - The Class-Path manifest attribute in /Users/yjs/.gradle/caches/modules-2/files-2.1/xalan/serializer/2.7.2/24247f3bb052ee068971393bdb83e04512bb1c3c/serializer-2.7.2.jar referenced one or more files that do not exist: file:/Users/yjs/.gradle/caches/modules-2/files-2.1/xalan/serializer/2.7.2/24247f3bb052ee068971393bdb83e04512bb1c3c/xml-apis.jar
+15:35:26 INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+15:35:26 INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+15:35:27 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+15:35:27 INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 92 ms. Found 8 JPA repository interfaces.
+15:35:28 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+15:35:28 INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+15:35:28 INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+15:35:28 INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.75]
+15:35:28 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+15:35:28 INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1982 ms
+15:35:28 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+15:35:29 INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+15:35:29 INFO  o.s.b.a.h.H2ConsoleAutoConfiguration - H2 console available at '/h2-console'. Database available at 'jdbc:oracle:thin:@localhost:49153/xe'
+15:35:29 INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+15:35:29 INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 5.6.15.Final
+15:35:29 INFO  o.h.annotations.common.Version - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+15:35:29 INFO  org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.Oracle10gDialect
+15:35:40 INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+15:35:40 INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+15:35:41 INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@7d2c30fb, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@3c97a83f, org.springframework.security.web.context.SecurityContextPersistenceFilter@6006c057, org.springframework.security.web.header.HeaderWriterFilter@644daa6, org.springframework.security.web.authentication.logout.LogoutFilter@362b73a2, com.nsunf.newsvoca.config.JwtAuthenticationFilter@4faedb26, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@720abcda, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@697a2932, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@20206884, org.springframework.security.web.session.SessionManagementFilter@58ebee65, org.springframework.security.web.access.ExceptionTranslationFilter@37399f0d, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@7fdff994]
+15:35:41 INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+15:35:41 INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+15:35:41 INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+15:35:41 INFO  c.nsunf.newsvoca.NewsvocaApplication - Started NewsvocaApplication in 15.798 seconds (JVM running for 16.775)
+15:35:47 INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+15:35:47 INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+15:35:47 INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
