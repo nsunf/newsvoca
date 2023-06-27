@@ -35,13 +35,14 @@ public class MemberService implements UserDetailsService {
     private final TokenProvider tokenProvider;
     private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
+    private final MemberImgService memberImgService;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Member member = this.memberRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
+        String memberImgUrl = memberImgService.getMemberImgUrlByEmail(email);
 
-
-        return new CustomUserDetails(member);
+        return new CustomUserDetails(member, memberImgUrl);
 
 //        Member member = this.memberRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
 //        GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(member.getRole().getAuthority());
@@ -61,7 +62,7 @@ public class MemberService implements UserDetailsService {
 
         Authentication authentication = managerBuilder.getObject().authenticate(authToken);
 
-        return tokenProvider.generateToken  (authentication);
+        return tokenProvider.generateToken(authentication);
     }
 
     public Long createMember(MemberFormDto memberFormDto, PasswordEncoder pwEncoder) {

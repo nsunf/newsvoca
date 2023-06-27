@@ -16,8 +16,10 @@ public class MemberImg extends BaseEntity {
     @OneToOne
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
-    @Column(nullable = false)
+    @Column
     private String url;
-    @Column(nullable = false)
+    @Column
     private String filename;
+    @Column
+    private String oriImgName;
 }

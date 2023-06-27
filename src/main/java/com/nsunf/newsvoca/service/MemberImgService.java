@@ -10,6 +10,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -22,22 +23,29 @@ public class MemberImgService {
     private final MemberImgRepository memberImgRepository;
     private final FileService fileService;
 
-    // 작성중
-//    public void saveImg(MemberImg memberImg, MultipartFile multipartFile) throws IOException {
-//        if (multipartFile == null || multipartFile.isEmpty()) return;
-//
-//        if (StringUtils.hasText()) {
-//            fileService.deleteFile(memberImgLocation + "/" + memberImg.getFilename());
-//        }
-//
-//        String oriImgName = multipartFile.getOriginalFilename();
-//        String imgName = null;
-//        String imgUrl = null;
-//
-//        imgName = fileService.uploadFile(memberImgLocation, oriImgName, multipartFile.getBytes());
-//        imgUrl = "/resources/img/" + imgName;
-//
-//        memberImg
-//
-//    }
+    public void saveImg(MemberImg memberImg, MultipartFile multipartFile) throws IOException {
+        if (multipartFile == null || multipartFile.isEmpty()) return;
+
+        if (StringUtils.hasText(memberImg.getFilename())) {
+            fileService.deleteFile(memberImgLocation + "/" + memberImg.getFilename());
+        }
+
+        String oriImgName = multipartFile.getOriginalFilename();
+        String imgName = null;
+        String imgUrl = null;
+
+        imgName = fileService.uploadFile(memberImgLocation, oriImgName, multipartFile.getBytes());
+        imgUrl = "/resources/img/" + imgName;
+
+        memberImg.setFilename(imgName);
+        memberImg.setUrl(imgUrl);
+        memberImg.setOriImgName(oriImgName);
+        memberImgRepository.save(memberImg);
+    }
+
+    public String getMemberImgUrlByEmail(String email) {
+        Optional<MemberImg> memberImg = memberImgRepository.findByMemberEmail(email);
+        return memberImg.map(MemberImg::getUrl).orElse(null);
+    }
+
 }

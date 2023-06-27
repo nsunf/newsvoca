@@ -22,13 +22,16 @@ public class CustomUserDetails implements UserDetails {
     private Role role;
     private MemberStatus status;
 
-    public CustomUserDetails(Member member) {
+    private String memberImgUrl;
+
+    public CustomUserDetails(Member member, String memberImgUrl) {
         this.id = member.getId();
         this.email = member.getEmail();
         this.nickname = member.getNickname();
         this.password = member.getPassword();
         this.role = member.getRole();
         this.status = member.getStatus();
+        this.memberImgUrl = memberImgUrl;
     }
 
     public CustomUserDetails(String username, String password, Collection<? extends GrantedAuthority> authorities) {

@@ -5,16 +5,17 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SecurityException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
@@ -23,17 +24,28 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class TokenProvider {
     private static final String AUTHORITIES_KEY = "auth";
     private static final String BEARER_TYPE = "bearer";
     private static final long ACCESS_TOKEN_EXPIRE_TIME = 60 * 60 * 1000L;
-    private final Key key;
+
+    @Value("${jwt.secret}")
+    private String secretKey;
+    private Key key;
 
 
-    public TokenProvider(@Value("${jwt.secret}") String secret) {
-        byte[] keyBytes = Decoders.BASE64.decode(secret);
+    @PostConstruct
+    private void init() {
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
+
+
+//    public TokenProvider(@Value("${jwt.secret}") String secret) {
+//        byte[] keyBytes = Decoders.BASE64.decode(secret);
+//        this.key = Keys.hmacShaKeyFor(keyBytes);
+//    }
 
     public TokenDto generateToken(Authentication authentication) {
         String authorities = authentication.getAuthorities().stream()
@@ -73,6 +85,7 @@ public class TokenProvider {
 
 //        UserDetails principal = new User(claims.getSubject(), "", authorities);
         UserDetails principal = new CustomUserDetails(claims.getSubject(), "", authorities);
+//        UserDetails principal = userDetailsService.loadUserByUsername(claims.getSubject());
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
 
