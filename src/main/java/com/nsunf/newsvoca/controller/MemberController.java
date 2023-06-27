@@ -42,16 +42,18 @@ public class MemberController {
     @GetMapping("/test")
     public String test() {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        CustomUserDetails user = null;
 
         try {
-            CustomUserDetails cd = (CustomUserDetails) userDetails;
-            log.info(cd.toString());
+            user = (CustomUserDetails) userDetails;
         } catch (Exception e) {
             log.error(e.getMessage());
         }
 
-        log.info(userDetails.toString());
 
-        return "done";
+        if (user != null)
+            return user.toString();
+        else
+            return "No UsersDetail";
     }
 }

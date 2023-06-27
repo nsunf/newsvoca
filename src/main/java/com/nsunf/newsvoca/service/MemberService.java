@@ -29,7 +29,7 @@ import java.util.Collections;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class MemberService implements UserDetailsService {
+public class MemberService {
 
     private final AuthenticationManagerBuilder managerBuilder;
     private final TokenProvider tokenProvider;
@@ -37,17 +37,6 @@ public class MemberService implements UserDetailsService {
     private final MemberRepository memberRepository;
     private final MemberImgService memberImgService;
 
-    @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Member member = this.memberRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
-        String memberImgUrl = memberImgService.getMemberImgUrlByEmail(email);
-
-        return new CustomUserDetails(member, memberImgUrl);
-
-//        Member member = this.memberRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
-//        GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(member.getRole().getAuthority());
-//        return new User(member.getEmail(), member.getPassword(), Collections.singleton(grantedAuthority));
-    }
 
     public Long signup(MemberFormDto memberFormDto) {
         if (memberRepository.existsByEmail(memberFormDto.getEmail())) {

@@ -1,6 +1,7 @@
 package com.nsunf.newsvoca.config;
 
 import com.nsunf.newsvoca.dto.TokenDto;
+import com.nsunf.newsvoca.service.CustomUserDetailsService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -34,18 +35,13 @@ public class TokenProvider {
     private String secretKey;
     private Key key;
 
+    private final CustomUserDetailsService userDetailsService;
 
     @PostConstruct
     private void init() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
-
-
-//    public TokenProvider(@Value("${jwt.secret}") String secret) {
-//        byte[] keyBytes = Decoders.BASE64.decode(secret);
-//        this.key = Keys.hmacShaKeyFor(keyBytes);
-//    }
 
     public TokenDto generateToken(Authentication authentication) {
         String authorities = authentication.getAuthorities().stream()
@@ -82,10 +78,7 @@ public class TokenProvider {
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
 
-
-//        UserDetails principal = new User(claims.getSubject(), "", authorities);
-        UserDetails principal = new CustomUserDetails(claims.getSubject(), "", authorities);
-//        UserDetails principal = userDetailsService.loadUserByUsername(claims.getSubject());
+        UserDetails principal = userDetailsService.loadUserByUsername(claims.getSubject());
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
 
